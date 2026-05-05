@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>mObywatel - Generator Dowodu</title>
+    <title>mObywatel - Dowód</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -19,8 +19,8 @@
             width: 100%;
             background: rgba(255,255,255,0.96);
             border-radius: 48px;
-            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5);
             overflow: hidden;
+            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5);
         }
         header {
             background: #0a2f44;
@@ -29,7 +29,6 @@
             text-align: center;
         }
         header h1 { font-size: 1.9rem; }
-        header p { opacity: 0.8; }
         .form-card, .dowod-card { padding: 24px 22px; }
         .photo-zone {
             background: #f0f4f8;
@@ -90,13 +89,14 @@
             display: flex;
             justify-content: space-between;
         }
-        .gov-badge { background: #ffc107; color: #1e2f3c; padding: 4px 12px; border-radius: 50px; font-size: 0.7rem; }
+        .gov-badge { background: #ffc107; color: #1e2f3c; padding: 4px 12px; border-radius: 50px; font-size: 0.7rem; font-weight: bold; }
         .zdjecie-sekcja { display: flex; gap: 20px; align-items: center; margin-bottom: 28px; border-bottom: 1px solid #e0e7ef; padding-bottom: 20px; }
-        .zdjecie-ramka { width: 110px; height: 130px; background: #eef2f7; border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .zdjecie-ramka { width: 110px; height: 130px; background: #eef2f7; border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #eef2f7; }
         .zdjecie-ramka img { width: 100%; height: 100%; object-fit: cover; }
+        .dane-podstawowe { flex: 1; }
         .grid-dane { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
         .pole-dane { background: #f8fafc; padding: 10px; border-radius: 16px; }
-        .label-mini { font-weight: bold; color: #2c5a7a; font-size: 0.7rem; text-transform: uppercase; }
+        .label-mini { font-weight: bold; color: #2c5a7a; font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 4px; }
         .wartosc { font-size: 1rem; font-weight: 600; color: #1e2f3c; }
         .back-btn {
             background: #eef2f7;
@@ -106,9 +106,10 @@
             border-radius: 40px;
             margin-top: 25px;
             cursor: pointer;
+            font-weight: bold;
         }
         .info-box { background: #eef3fc; padding: 14px; border-radius: 24px; margin: 20px 0 10px; font-size: 0.75rem; text-align: center; }
-        footer { text-align: center; padding: 12px; font-size: 0.7rem; background: #eaf0f5; }
+        footer { text-align: center; padding: 12px; font-size: 0.7rem; background: #eaf0f5; color: #2c4d6e; }
     </style>
 </head>
 <body>
@@ -122,57 +123,57 @@
     <div id="formularzSection" class="form-card">
         <div id="photoZone" class="photo-zone">
             <div class="photo-preview" id="photoPreview">
-                <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">📷</div>
+                <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:3rem;">📷</div>
             </div>
             <div><button type="button" class="photo-btn" id="selectPhotoBtn">➕ Dodaj zdjęcie</button></div>
         </div>
         <input type="file" id="photoInput" accept="image/*" style="display:none;">
 
         <form id="mainForm">
-            <div class="input-group"><label>Imię *</label><input type="text" id="name" required></div>
-            <div class="input-group"><label>Nazwisko *</label><input type="text" id="surname" required></div>
+            <div class="input-group"><label>Imię *</label><input type="text" id="name" required placeholder="Jan"></div>
+            <div class="input-group"><label>Nazwisko *</label><input type="text" id="surname" required placeholder="Kowalski"></div>
             <div class="input-group"><label>Płeć</label><select id="gender"><option>Mężczyzna</option><option>Kobieta</option></select></div>
             <div class="input-group"><label>Data urodzenia *</label><input type="date" id="dob" required></div>
-            <div class="input-group"><label>Miejsce urodzenia *</label><input type="text" id="birthPlace" required></div>
-            <div class="input-group"><label>Ulica i numer *</label><input type="text" id="street" required></div>
+            <div class="input-group"><label>Miejsce urodzenia *</label><input type="text" id="birthPlace" required placeholder="Warszawa"></div>
+            <div class="input-group"><label>Ulica i numer *</label><input type="text" id="street" required placeholder="ul. Przykładowa 1"></div>
             <div class="row-2col">
-                <div><label>Kod pocztowy *</label><input type="text" id="postalCode" required></div>
-                <div><label>Miasto *</label><input type="text" id="city" required></div>
+                <div><label>Kod pocztowy *</label><input type="text" id="postalCode" required placeholder="00-000"></div>
+                <div><label>Miasto *</label><input type="text" id="city" required placeholder="Warszawa"></div>
             </div>
             <button type="submit">✅ WEJDŹ - POKAŻ DOWÓD</button>
         </form>
         <div class="info-box">📱 Dodaj do ekranu głównego</div>
     </div>
 
-    <!-- DOWÓD -->
+    <!-- EKRAN DOWODU -->
     <div id="dowodSection" class="dowod-card">
         <div class="dowod-header">
             <h3>📘 mObywatel</h3>
             <div class="gov-badge">RZECZPOSPOLITA POLSKA</div>
         </div>
-        <div class="dowod-zawartosc" style="padding:24px">
+        <div style="padding:24px">
             <div class="zdjecie-sekcja">
                 <div class="zdjecie-ramka" id="dowodFoto">🖼️</div>
-                <div>
-                    <p><span class="label-mini">IMIĘ I NAZWISKO</span><br><span class="wartosc" id="dowodImieNazwisko">-</span></p>
-                    <p><span class="label-mini">PESEL</span><br><span class="wartosc" id="dowodPesel">-</span></p>
+                <div class="dane-podstawowe">
+                    <div><span class="label-mini">IMIĘ I NAZWISKO</span><div class="wartosc" id="dowodImieNazwisko">-</div></div>
+                    <div style="margin-top:12px;"><span class="label-mini">PESEL</span><div class="wartosc" id="dowodPesel">-</div></div>
                 </div>
             </div>
             <div class="grid-dane">
-                <div class="pole-dane"><span class="label-mini">DATA URODZ.</span><br><span id="dowodDataUr">-</span></div>
-                <div class="pole-dane"><span class="label-mini">PŁEĆ</span><br><span id="dowodPlec">-</span></div>
-                <div class="pole-dane"><span class="label-mini">MIEJSCE URODZ.</span><br><span id="dowodMiejsceUr">-</span></div>
-                <div class="pole-dane"><span class="label-mini">ADRES</span><br><span id="dowodAdres">-</span></div>
-                <div class="pole-dane"><span class="label-mini">TERMIN WAŻNOŚCI</span><br><span id="dowodWaznosc">-</span></div>
+                <div class="pole-dane"><span class="label-mini">DATA URODZENIA</span><div class="wartosc" id="dowodDataUr">-</div></div>
+                <div class="pole-dane"><span class="label-mini">PŁEĆ</span><div class="wartosc" id="dowodPlec">-</div></div>
+                <div class="pole-dane"><span class="label-mini">MIEJSCE URODZENIA</span><div class="wartosc" id="dowodMiejsceUr">-</div></div>
+                <div class="pole-dane"><span class="label-mini">ADRES</span><div class="wartosc" id="dowodAdres">-</div></div>
+                <div class="pole-dane"><span class="label-mini">TERMIN WAŻNOŚCI</span><div class="wartosc" id="dowodWaznosc">-</div></div>
             </div>
             <button class="back-btn" id="backBtn">✏️ EDYTUJ DANE</button>
         </div>
     </div>
-    <footer>Generator dowodu</footer>
+    <footer>Generator dowodu osobistego</footer>
 </div>
 
 <script>
-    // ZDJĘCIE
+    // ---------- ZDJĘCIE ----------
     const photoInput = document.getElementById('photoInput');
     const selectBtn = document.getElementById('selectPhotoBtn');
     const photoZoneDiv = document.getElementById('photoZone');
@@ -193,7 +194,7 @@
         reader.readAsDataURL(file);
     };
 
-    // POMOCNICZE
+    // ---------- GENEROWANIE PESEL ----------
     function generatePesel(dob, gender) {
         if(!dob) return "12345678901";
         let parts = dob.split('-');
@@ -220,7 +221,7 @@
         return d.toLocaleDateString('pl-PL');
     }
 
-    // FORMULARZ - PRZEJŚCIE DO DOWODU
+    // ---------- PRZEJŚCIE DO DOWODU ----------
     const formDiv = document.getElementById('formularzSection');
     const dowodDiv = document.getElementById('dowodSection');
     const form = document.getElementById('mainForm');
@@ -228,9 +229,9 @@
     form.onsubmit = function(event) {
         event.preventDefault();
         
-        // Sprawdź czy zdjęcie jest
+        // Sprawdź zdjęcie
         if(!currentImage) {
-            alert("❌ Musisz dodać zdjęcie! Kliknij w pole 'Dodaj zdjęcie' i wybierz plik.");
+            alert("❌ Musisz dodać zdjęcie! Kliknij w pole 'Dodaj zdjęcie'.");
             return;
         }
         
@@ -244,7 +245,7 @@
         let postal = document.getElementById('postalCode').value.trim();
         let city = document.getElementById('city').value.trim();
         
-        // Sprawdź czy wszystkie required są wypełnione
+        // Sprawdź czy wszystko wypełnione
         if(!name || !surname || !dob || !birthPlace || !street || !postal || !city) {
             alert("❌ Wypełnij wszystkie pola z *");
             return;
@@ -253,7 +254,7 @@
         // Generuj PESEL
         let pesel = generatePesel(dob, gender);
         
-        // Wypełnij dowód
+        // Wypełnij dane w dowodzie
         document.getElementById('dowodImieNazwisko').innerText = name + " " + surname;
         document.getElementById('dowodPesel').innerText = pesel;
         document.getElementById('dowodDataUr').innerHTML = new Date(dob).toLocaleDateString('pl-PL');
@@ -266,12 +267,12 @@
         const fotoRamka = document.getElementById('dowodFoto');
         fotoRamka.innerHTML = `<img src="${currentImage}" style="width:100%; height:100%; object-fit:cover;">`;
         
-        // Przełącz widoki
+        // PRZEŁĄCZ WIDOKI – TO NAJWAŻNIEJSZE!
         formDiv.style.display = 'none';
         dowodDiv.style.display = 'block';
     };
 
-    // Przycisk powrotu
+    // Przycisk powrotu do formularza
     document.getElementById('backBtn').onclick = function() {
         dowodDiv.style.display = 'none';
         formDiv.style.display = 'block';
