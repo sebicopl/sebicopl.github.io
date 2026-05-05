@@ -2,14 +2,15 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>mObywatel - generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>mObywatel - Generator Dowodu</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
+
         body {
             background: linear-gradient(145deg, #1a2a3a 0%, #0f1a24 100%);
             font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
@@ -18,23 +19,38 @@
             justify-content: center;
             min-height: 100vh;
         }
+
+        /* KONTENER */
         .container {
             max-width: 550px;
             width: 100%;
-            background: rgba(255,255,255,0.94);
+            background: rgba(255,255,255,0.96);
             border-radius: 48px;
             box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5);
             overflow: hidden;
+            transition: all 0.3s ease;
         }
+
         header {
             background: #0a2f44;
             color: white;
             padding: 24px 20px;
             text-align: center;
         }
-        header h1 { font-size: 1.9rem; letter-spacing: -0.5px; }
-        header p { opacity: 0.8; font-size: 0.9rem; }
-        .form-card { padding: 24px 22px; }
+        header h1 {
+            font-size: 1.9rem;
+            letter-spacing: -0.5px;
+        }
+        header p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* FORMULARZ */
+        .form-card, .dowod-card {
+            padding: 24px 22px;
+        }
+
         .photo-zone {
             background: #f0f4f8;
             border-radius: 32px;
@@ -43,6 +59,7 @@
             margin-bottom: 28px;
             border: 2px dashed #3a6b92;
             cursor: pointer;
+            transition: 0.2s;
         }
         .photo-preview {
             width: 130px;
@@ -58,18 +75,29 @@
             box-shadow: 0 6px 14px rgba(0,0,0,0.2);
             overflow: hidden;
         }
-        .photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
         .photo-placeholder {
             width: 100%; height: 100%;
             display: flex; align-items: center; justify-content: center;
             background: #9aaebf; color: #2c3e4e;
         }
         .photo-btn {
-            background: #2c5a7a; border: none; color: white;
-            padding: 8px 18px; border-radius: 100px; font-weight: bold;
-            margin-top: 8px; cursor: pointer; font-size: 0.9rem;
+            background: #2c5a7a;
+            border: none;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 100px;
+            font-weight: bold;
+            margin-top: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
             display: inline-block;
         }
+
         .input-group { margin-bottom: 18px; }
         label { font-weight: 600; display: block; margin-bottom: 6px; color: #1e2f3c; font-size: 0.85rem; }
         input, select {
@@ -79,77 +107,332 @@
         input:focus, select:focus { outline: none; border-color: #2c5a7a; box-shadow: 0 0 0 3px rgba(44,90,122,0.2); }
         .row-2col { display: flex; gap: 12px; }
         .row-2col > div { flex: 1; }
+        
         button[type="submit"] {
-            background: #0f6b3a; color: white; border: none;
-            padding: 15px; width: 100%; font-size: 1.3rem; font-weight: bold;
-            border-radius: 50px; margin-top: 20px; cursor: pointer;
+            background: #0f6b3a;
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50px;
+            margin-top: 20px;
+            cursor: pointer;
             box-shadow: 0 5px 0 #064e2b;
+            transition: 0.05s linear;
         }
         button[type="submit"]:active { transform: translateY(2px); box-shadow: 0 2px 0 #064e2b; }
-        .info-box {
-            background: #eef3fc; padding: 14px; border-radius: 24px;
-            margin: 20px 0 10px; font-size: 0.75rem; color: #004070; text-align: center;
+
+        /* WYGLĄD DOWODU */
+        .dowod-card {
+            display: none;
+            background: white;
+            border-radius: 32px;
+            margin: 10px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-        .loading-indicator { display: none; text-align: center; margin-top: 10px; font-weight: bold; color: #2c5a7a; }
-        footer { text-align: center; padding: 12px; font-size: 0.7rem; background: #eaf0f5; color: #2c4d6e; }
+        .dowod-header {
+            background: #0a2f44;
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .dowod-header h3 { font-size: 1.2rem; }
+        .gov-badge {
+            background: #ffc107;
+            color: #1e2f3c;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        .dowod-zawartosc {
+            padding: 24px;
+        }
+        .zdjecie-sekcja {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 28px;
+            border-bottom: 1px solid #e0e7ef;
+            padding-bottom: 20px;
+        }
+        .zdjecie-ramka {
+            width: 110px;
+            height: 130px;
+            background: #eef2f7;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #cbd5e1;
+        }
+        .zdjecie-ramka img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .dane-podstawowe {
+            flex: 1;
+        }
+        .dane-podstawowe p {
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+        .label-mini {
+            font-weight: bold;
+            color: #2c5a7a;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+        .wartosc {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e2f3c;
+        }
+        .grid-dane {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 10px;
+        }
+        .pole-dane {
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 16px;
+        }
+        .back-btn {
+            background: #eef2f7;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 40px;
+            font-weight: bold;
+            margin-top: 25px;
+            cursor: pointer;
+            color: #1e4663;
+            font-size: 1rem;
+        }
+        .info-box {
+            background: #eef3fc;
+            padding: 14px;
+            border-radius: 24px;
+            margin: 20px 0 10px;
+            font-size: 0.75rem;
+            color: #004070;
+            text-align: center;
+        }
+        footer {
+            text-align: center;
+            padding: 12px;
+            font-size: 0.7rem;
+            background: #eaf0f5;
+            color: #2c4d6e;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <header><h1>cwelObywatel 2.0</h1><p>Michał nie ma palca</p></header>
-    <div class="form-card">
+<div class="container" id="appContainer">
+    <header>
+        <h1>cwelObywatel 2.0</h1>
+        <p>Michał nie ma palca</p>
+    </header>
+
+    <!-- FORMULARZ -->
+    <div id="formularzSection" class="form-card">
         <div id="photoZone" class="photo-zone">
-            <div class="photo-preview" id="photoPreview"><div class="photo-placeholder">📷</div></div>
+            <div class="photo-preview" id="photoPreview">
+                <div class="photo-placeholder">📷</div>
+            </div>
             <div><button type="button" class="photo-btn" id="selectPhotoBtn">➕ Dodaj zdjęcie</button></div>
             <div class="info-box" style="margin-top:12px;">📸 Kliknij, wybierz JPG/PNG (max 5MB)</div>
         </div>
         <input type="file" id="photoInput" accept="image/jpeg,image/png,image/jpg" style="display:none;">
+
         <form id="mainForm">
-            <div class="input-group"><label>Imię (imiona) *</label><input type="text" id="name" required placeholder="Jan Kowalski"></div>
-            <div class="input-group"><label>Nazwisko *</label><input type="text" id="surname" required></div>
+            <div class="input-group"><label>Imię (imiona) *</label><input type="text" id="name" required placeholder="Jan"></div>
+            <div class="input-group"><label>Nazwisko *</label><input type="text" id="surname" required placeholder="Kowalski"></div>
             <div class="input-group"><label>Płeć</label><select id="gender"><option>Mężczyzna</option><option>Kobieta</option></select></div>
             <div class="input-group"><label>Data urodzenia *</label><input type="date" id="dob" required></div>
-            <div class="input-group"><label>Obywatelstwo *</label><input type="text" id="citizenship" required placeholder="polskie"></div>
+            <div class="input-group"><label>Obywatelstwo *</label><input type="text" id="citizenship" required value="polskie"></div>
             <div class="input-group"><label>Nazwisko rodowe</label><input type="text" id="maidenName"></div>
-            <div class="input-group"><label>Nazwisko rodowe ojca</label><input type="text" id="fatherMaiden"></div>
-            <div class="input-group"><label>Nazwisko rodowe matki</label><input type="text" id="motherMaiden"></div>
-            <div class="input-group"><label>Miejsce zamieszkania</label><input type="text" id="residence"></div>
             <div class="input-group"><label>Miejsce urodzenia *</label><input type="text" id="birthPlace" required></div>
-            <div class="input-group"><label>Kraj urodzenia *</label><input type="text" id="birthCountry" required></div>
             <div class="input-group"><label>Ulica i numer domu *</label><input type="text" id="street" required></div>
-            <div class="row-2col"><div><label>Kod pocztowy *</label><input type="text" id="postalCode" required placeholder="00-000"></div><div><label>Miasto *</label><input type="text" id="city" required></div></div>
-            <button type="submit">✅ WEJDŹ</button>
+            <div class="row-2col"><div><label>Kod pocztowy *</label><input type="text" id="postalCode" required></div><div><label>Miasto *</label><input type="text" id="city" required></div></div>
+            <button type="submit">✅ WEJDŹ • POKAŻ DOWÓD</button>
         </form>
-        <div id="loadingMsg" class="loading-indicator">⏳ Ładowanie...</div>
-        <div class="info-box">📱 iOS: Safari → udostępnij → Do ekranu głównego.<br>🤖 Android: Chrome → 3 kropki → Dodaj do ekranu głównego.</div>
+        <div class="info-box">📱 Dodaj do ekranu głównego – działa jak aplikacja</div>
     </div>
-    <footer>Generator danych demonstracyjnych</footer>
+
+    <!-- EKRAN DOWODU (początkowo ukryty) -->
+    <div id="dowodSection" class="dowod-card">
+        <div class="dowod-header">
+            <h3>📘 mObywatel</h3>
+            <div class="gov-badge">RZECZYPOSPOLITA POLSKA</div>
+        </div>
+        <div class="dowod-zawartosc">
+            <div class="zdjecie-sekcja">
+                <div class="zdjecie-ramka" id="dowodFotoRamka">🖼️</div>
+                <div class="dane-podstawowe">
+                    <p><span class="label-mini">IMIĘ</span><br><span class="wartosc" id="dowodImie">-</span></p>
+                    <p><span class="label-mini">NAZWISKO</span><br><span class="wartosc" id="dowodNazwisko">-</span></p>
+                    <p><span class="label-mini">PESEL</span><br><span class="wartosc" id="dowodPesel">***********</span></p>
+                </div>
+            </div>
+            <div class="grid-dane">
+                <div class="pole-dane"><span class="label-mini">DATA URODZ.</span><br><span id="dowodDataUr">-</span></div>
+                <div class="pole-dane"><span class="label-mini">PŁEĆ</span><br><span id="dowodPlec">-</span></div>
+                <div class="pole-dane"><span class="label-mini">OBYWATELSTWO</span><br><span id="dowodObywatel">-</span></div>
+                <div class="pole-dane"><span class="label-mini">MIEJSCE URODZ.</span><br><span id="dowodMiejsceUr">-</span></div>
+                <div class="pole-dane"><span class="label-mini">ADRES</span><br><span id="dowodAdres">-</span></div>
+                <div class="pole-dane"><span class="label-mini">TERMIN WAŻNOŚCI</span><br><span id="dowodWaznosc">-</span></div>
+            </div>
+            <button class="back-btn" id="backToFormBtn">✏️ EDYTUJ DANE / NOWY DOWÓD</button>
+        </div>
+    </div>
+    <footer>Generator danych – wygląd jak oryginalny mObywatel</footer>
 </div>
+
 <script>
-    const photoInput=document.getElementById('photoInput'), selectBtn=document.getElementById('selectPhotoBtn'), zone=document.getElementById('photoZone'), previewDiv=document.getElementById('photoPreview');
-    let currentImage=null;
-    const trigger=()=>photoInput.click();
-    selectBtn.addEventListener('click',trigger);
-    zone.addEventListener('click',e=>{if(e.target!==selectBtn) trigger();});
-    photoInput.addEventListener('change',function(e){
-        const file=e.target.files[0];
-        if(!file) return;
-        if(file.size>5*1024*1024){alert('Maks. 5MB'); photoInput.value=''; return;}
-        if(!file.type.startsWith('image/')){alert('Plik graficzny'); photoInput.value=''; return;}
-        const reader=new FileReader();
-        reader.onload=ev=>{currentImage=ev.target.result; previewDiv.innerHTML=''; let img=document.createElement('img'); img.src=currentImage; img.style.width='100%'; img.style.height='100%'; img.style.objectFit='cover'; previewDiv.appendChild(img); document.getElementById('loadingMsg').style.display='none';};
-        reader.onerror=()=>{alert('Błąd odczytu'); photoInput.value='';};
+    // ---------- ZDJĘCIE ----------
+    const photoInput = document.getElementById('photoInput');
+    const selectPhotoBtn = document.getElementById('selectPhotoBtn');
+    const photoZone = document.getElementById('photoZone');
+    const photoPreviewDiv = document.getElementById('photoPreview');
+    let currentImageData = null;
+
+    function triggerFileSelect() { photoInput.click(); }
+    selectPhotoBtn.addEventListener('click', triggerFileSelect);
+    photoZone.addEventListener('click', (e) => { if(e.target !== selectPhotoBtn) triggerFileSelect(); });
+
+    photoInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) { alert('Maks. 5MB'); photoInput.value = ''; return; }
+        if (!file.type.startsWith('image/')) { alert('Plik graficzny'); photoInput.value = ''; return; }
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            currentImageData = ev.target.result;
+            photoPreviewDiv.innerHTML = '';
+            let img = document.createElement('img');
+            img.src = currentImageData;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            photoPreviewDiv.appendChild(img);
+        };
+        reader.onerror = () => { alert('Błąd odczytu'); photoInput.value = ''; };
         reader.readAsDataURL(file);
     });
-    document.getElementById('mainForm').addEventListener('submit',function(e){
+
+    // ---------- GENEROWANIE PESEL NA PODSTAWIE DATY URODZENIA I PŁCI ----------
+    function generatePeselFromDateAndGender(dateStr, gender) {
+        if (!dateStr) return "XXXXXXXXXXXXXXXXX";
+        let [year, month, day] = dateStr.split('-');
+        let yy = year.slice(-2);
+        let mm = month;
+        let dd = day;
+        // Korekta miesięcy dla PESEL (dla lat 2000+ dodajemy 20 do miesiąca)
+        let century = parseInt(year.substring(0,2));
+        let monthCorrection = 0;
+        if (century >= 20) monthCorrection = 20; // 2000+
+        let peselMonth = parseInt(mm) + monthCorrection;
+        let peselMonthStr = peselMonth.toString().padStart(2,'0');
+        let peselDatePart = yy + peselMonthStr + dd;
+        let randomSeq = Math.floor(Math.random() * 1000).toString().padStart(3,'0');
+        let tempPesel = peselDatePart + randomSeq;
+        let genderDigit = (gender === "Mężczyzna") ? (Math.floor(Math.random()*5)*2+1) : (Math.floor(Math.random()*5)*2);
+        let peselBase = tempPesel + genderDigit.toString();
+        // Uproszczona cyfra kontrolna (dla demo, działa bezbłędnie)
+        let weights = [1,3,7,9,1,3,7,9,1,3];
+        let sum = 0;
+        for(let i=0; i<10; i++) sum += parseInt(peselBase[i]) * weights[i];
+        let control = (10 - (sum % 10)) % 10;
+        return peselBase + control;
+    }
+
+    // Ważność dowodu: +5 lat od dziś
+    function getExpiryDate() {
+        let d = new Date();
+        d.setFullYear(d.getFullYear() + 5);
+        return d.toLocaleDateString('pl-PL');
+    }
+
+    // ---------- PRZEJŚCIE DO WIDOKU DOWODU ----------
+    const formSection = document.getElementById('formularzSection');
+    const dowodSection = document.getElementById('dowodSection');
+    const mainForm = document.getElementById('mainForm');
+
+    mainForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        let hasError=false;
-        ['name','surname','dob','citizenship','birthPlace','birthCountry','street','postalCode','city'].forEach(id=>{let f=document.getElementById(id); if(!f.value.trim()){f.style.borderColor='#c7362b'; hasError=true;}else f.style.borderColor='#cfdfed';});
-        if(hasError){alert('Wypełnij wszystkie wymagane pola (*)'); return;}
-        const loadSpan=document.getElementById('loadingMsg'); loadSpan.style.display='block';
-        setTimeout(()=>{loadSpan.style.display='none'; alert(`📄 DANE ZAPISANE\nImię: ${document.getElementById('name').value}\nNazwisko: ${document.getElementById('surname').value}\nZdjęcie: ${currentImage?'✅ dodane':'⚠️ brak'}\n\nStrona działa poprawnie.`);},800);
+
+        // Walidacja pól obowiązkowych
+        const required = ['name', 'surname', 'dob', 'citizenship', 'birthPlace', 'street', 'postalCode', 'city'];
+        let ok = true;
+        required.forEach(id => {
+            let field = document.getElementById(id);
+            if (!field.value.trim()) { field.style.borderColor = "#c7362b"; ok = false; }
+            else { field.style.borderColor = "#cfdfed"; }
+        });
+        if (!ok) { alert("Wypełnij wszystkie wymagane pola (*)"); return; }
+        if (!currentImageData) { alert("Dodaj zdjęcie (wymagane) – kliknij w strefę dodawania"); return; }
+
+        // Pobranie danych
+        let name = document.getElementById('name').value.trim();
+        let surname = document.getElementById('surname').value.trim();
+        let gender = document.getElementById('gender').value;
+        let dob = document.getElementById('dob').value;
+        let citizenship = document.getElementById('citizenship').value.trim();
+        let birthPlace = document.getElementById('birthPlace').value.trim();
+        let street = document.getElementById('street').value.trim();
+        let postal = document.getElementById('postalCode').value.trim();
+        let city = document.getElementById('city').value.trim();
+        let address = `${street}, ${postal} ${city}`;
+        let generatedPesel = generatePeselFromDateAndGender(dob, gender);
+        let expiry = getExpiryDate();
+
+        // Wypełnij widok dowodu
+        document.getElementById('dowodImie').innerText = name;
+        document.getElementById('dowodNazwisko').innerText = surname;
+        document.getElementById('dowodPesel').innerText = generatedPesel;
+        document.getElementById('dowodDataUr').innerHTML = new Date(dob).toLocaleDateString('pl-PL');
+        document.getElementById('dowodPlec').innerText = gender;
+        document.getElementById('dowodObywatel').innerText = citizenship.toUpperCase();
+        document.getElementById('dowodMiejsceUr').innerText = birthPlace;
+        document.getElementById('dowodAdres').innerText = address;
+        document.getElementById('dowodWaznosc').innerText = expiry;
+
+        // Zdjęcie w dowodzie
+        const fotoRamka = document.getElementById('dowodFotoRamka');
+        fotoRamka.innerHTML = '';
+        let imgDoc = document.createElement('img');
+        imgDoc.src = currentImageData;
+        imgDoc.style.width = '100%';
+        imgDoc.style.height = '100%';
+        imgDoc.style.objectFit = 'cover';
+        fotoRamka.appendChild(imgDoc);
+
+        // Przełącz widoki
+        formSection.style.display = 'none';
+        dowodSection.style.display = 'block';
     });
-    window.addEventListener('load',()=>document.getElementById('loadingMsg').style.display='none');
+
+    // Przycisk powrotu do formularza
+    document.getElementById('backToFormBtn').addEventListener('click', () => {
+        dowodSection.style.display = 'none';
+        formSection.style.display = 'block';
+        // Nie kasujemy zdjęcia ani danych, żeby można było edytować
+    });
+
+    // Inicjalnie ukryj dowód
+    dowodSection.style.display = 'none';
+    formSection.style.display = 'block';
 </script>
 </body>
 </html>
